@@ -1,0 +1,123 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/svg/waves-3.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom center;
+  background-color: #001220;
+  color: white;
+  font-family: 'Quicksand';
+}
+
+h1 {
+  font-family: 'Oswald';
+  font-size: 3em;
+  margin: 8px 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  &.center {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -25%);
+  }
+}
+
+table {
+  width: 50%;
+  margin: 16px;
+
+  tr th {
+    height: 1em;
+  }
+
+  tr td {
+    height: 113px;
+  }
+  
+  tr td, tr th {
+    text-align: center;
+    width: 113px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px;
+    position: relative;
+
+    &:hover {
+      .corner {
+        opacity: 0.4;
+      }
+    }
+  }
+  
+  tr.emph, td.emph, th.emph {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.log {
+  width: 40%;
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 400px;
+  padding: 16px;
+  border-radius: 2em;
+  margin: 16px;
+  overflow: auto;
+}
+
+a {
+  color: #e31ca7;
+
+  &.as-button {
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+    padding: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    img {
+      width: 16px;
+      height: 16px;
+      position: relative;
+      top: 1px;
+    }
+  }
+}
+
+.corner {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  letter-spacing: 0.1em;
+  opacity: 0.0;
+
+  span.sub {
+    vertical-align: sub;
+    font-size: 0.75em;
+  }
+}
+
+.visible {
+  .corner {
+    opacity: 0.4;
+  }
+}
+
+.square-input {
+  font-size: 2em;
+  background-color: transparent;
+  border: none;
+  color: white;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+}
