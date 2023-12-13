@@ -13,6 +13,12 @@ export class TransportsService {
 
   gridBackup: number[][] = [];
 
+  /** Lista de variáveis não-básicas para serem diferenciadas na grid */
+  gridNB: [number, number][] = [];
+
+  /** Caminho percorrido anotando + e - nas variáveis durante o processo de resolução */
+  path: [number, number][] = [];
+
   avaliable: number[] = [23, 76, 66];
   needed: number[] = [11, 22, 33, 44, 55];
 
@@ -20,6 +26,9 @@ export class TransportsService {
 
   avaliableBackup: number[] = [];
   neededBackup: number[] = [];
+
+  /** Atual menor valor do laço */
+  currentLower = 9999999;
 
   labelsSources: string[] = ['Marília', 'Rio Preto', 'São Paulo'];
   labelsDestinies: string[] = [
@@ -371,7 +380,265 @@ export class TransportsService {
    * Passo do algoritmo dos transportes que irá encontrar uma solução ótima
    */
   passoTransportes(): void {
-    //
+    const v: (number | null)[] = [];
+    const w: (number | null)[] = [];
+
+    const vnb: [number, number][] = [];
+
+    let count = 0;
+    /** Representa a maior quantidade de VBs em uma dada linha */
+    let mostVB = 0;
+    /** Representa a linha com mais variáveis básicas ou empatadas por mais variáveis básicas */
+    let mostVBRow = -1;
+
+    for (let i = 0; i < this.grid.length; i++) {
+      count = 0;
+      v.push(null);
+      for (let j = 0; j < this.grid[i].length; j++) {
+        if (i === 0) w.push(null);
+        if (this.grid[i][j] === 0) {
+          count++;
+          vnb.push([i, j]);
+        }
+      }
+      if (count > mostVB) {
+        mostVB = count;
+        mostVBRow = i;
+      }
+    }
+
+    this.logger.log(
+      `Calculando valores <span class="emp">v<span class="sub">i</span></span> e <span class="emp">w<span class="sub">j</span></span>.`,
+      'stp',
+      1
+    );
+
+    this.logger.log(
+      `A linha ${this.labelsSources[mostVBRow]} possui o maior número de variáveis básicas (${mostVB}).`,
+      'stp',
+      2
+    );
+
+    v[mostVBRow] = 0;
+
+    this.logger.log(
+      `Fazemos <span class="emp">v<span class="sub">${
+        mostVBRow + 1
+      }</span> = 0</span>`,
+      'stp',
+      2
+    );
+
+    for (let j = 0; j < w.length; j++) {
+      if (this.grid[mostVBRow][j] === 0) continue;
+      this.logger.log(
+        `Calculamos <span class="emp">v<span class="sub">${
+          mostVBRow + 1
+        }</span> + w<span class="sub">${j + 1}</span> - c<span class="sub">${
+          mostVBRow + 1
+        }${j + 1}</span> = 0 ⇒ w<span class="sub">${j + 1}</span> = ${
+          this.gridBackup[mostVBRow][j]
+        }</span>`,
+        'stp',
+        2
+      );
+      w[j] = this.gridBackup[mostVBRow][j];
+      this.logger.log(
+        `Calculamos <span class="emp">v<span class="sub">${
+          mostVBRow + 1
+        }</span> + w<span class="sub">${j + 1}</span> - c<span class="sub">${
+          mostVBRow + 1
+        }${j + 1}</span> = 0 ⇒ v<span class="sub">${mostVBRow + 1}</span> = ${
+          this.gridBackup[mostVBRow][j] - (w[j] as number)
+        }</span>`,
+        'stp',
+        2
+      );
+      v[mostVBRow] = this.gridBackup[mostVBRow][j] - (w[j] as number);
+    }
+
+    while (v.includes(null) || w.includes(null)) {
+      for (let i = 0; i < v.length; i++) {
+        // if (i === mostVBRow) continue;
+        for (let j = 0; j < w.length; j++) {
+          if (this.grid[i][j] === 0) continue;
+          if (w[j] === null) {
+            this.logger.log(
+              `Calculamos <span class="emp">v<span class="sub">${
+                i + 1
+              }</span> + w<span class="sub">${
+                j + 1
+              }</span> - c<span class="sub">${i + 1}${
+                j + 1
+              }</span> = 0 ⇒ w<span class="sub">${j + 1}</span> = ${
+                this.gridBackup[i][j]
+              }</span>`,
+              'stp',
+              2
+            );
+            w[j] = this.gridBackup[i][j] - (v[i] as number);
+          } else if (v[i] === null && w[j] !== null) {
+            this.logger.log(
+              `Calculamos <span class="emp">v<span class="sub">${
+                i + 1
+              }</span> + w<span class="sub">${
+                j + 1
+              }</span> - c<span class="sub">${i + 1}${
+                j + 1
+              }</span> = 0 ⇒ v<span class="sub">${i + 1}</span> = ${
+                this.gridBackup[i][j] - (w[j] as number)
+              }</span>`,
+              'stp',
+              2
+            );
+            v[i] = this.gridBackup[i][j] - (w[j] as number);
+          }
+        }
+      }
+    }
+
+    this.logger.log(
+      `Calculamos <span class="emp">v<span class="sub">i</span> = {${v.join(
+        ', '
+      )}}</span>`,
+      'stp',
+      1
+    );
+    this.logger.log(
+      `Calculamos <span class="emp">w<span class="sub">j</span> = {${w.join(
+        ', '
+      )}}</span>`,
+      'stp',
+      1
+    );
+
+    this.logger.log(
+      `Calculando os coeficientes <span class="emp">x<span class="sub">ij</span></span> das variáveis não-básicas`,
+      'stp',
+      0
+    );
+
+    let max = -1;
+    let maxIJ: [number, number] = [-1, -1];
+    for (let i = 0; i < v.length; i++) {
+      for (let j = 0; j < w.length; j++) {
+        if (this.grid[i][j] !== 0) continue;
+        this.gridNB.push([i, j]);
+        if (this.grid[i][j] > max) {
+          max = this.grid[i][j];
+          maxIJ = [i, j];
+        }
+        this.grid[i][j] =
+          (v[i] as number) + (w[j] as number) - this.gridBackup[i][j];
+        this.logger.log(
+          `Calculamos <span class="emp">x<span class="sub">${i + 1}${
+            j + 1
+          }</span> = ${this.grid[i][j]}</span>`,
+          'stp',
+          2
+        );
+      }
+    }
+
+    this.logger.log(
+      `Agora precisamos encontrar a variável entrante.`,
+      'stp',
+      2
+    );
+
+    this.logger.log(
+      `A variável entrante é <span class="emp">x<span class="sub">${
+        maxIJ[0] + 1
+      }${maxIJ[1] + 1}</span> = ${this.grid[maxIJ[0]][maxIJ[1]]}</span>.`,
+      'stp',
+      0
+    );
+
+    this.path = [maxIJ];
+
+    console.log(this.path);
+
+    this.passoLaco();
+    this.passoLaco();
+    this.passoLaco();
+  }
+
+  passoLaco(): void {
+    const isLine = this.path.length % 2 != 0;
+    console.log('isLine', isLine, this.path.length);
+    if (isLine) {
+      const i = this.path[this.path.length - 1][0];
+      for (let j = 0; j < this.grid[i].length; j++) {
+        if (
+          this.path[this.path.length - 1][0] === i &&
+          this.path[this.path.length - 1][1] === j
+        ) {
+          continue;
+        }
+        // Pula caso seja não-básica
+        if (this.gridNB.filter((el) => el[0] === i && el[1] === j).length > 0)
+          continue;
+
+        if (this.grid[i][j] < this.currentLower) {
+          this.currentLower = this.grid[i][j];
+        }
+
+        this.path.push([i, j]);
+
+        break;
+      }
+    } else {
+      const j = this.path[this.path.length - 1][1];
+      console.log(j);
+      for (let i = 0; i < this.grid.length; i++) {
+        if (
+          this.path[this.path.length - 1][0] === i &&
+          this.path[this.path.length - 1][1] === j
+        )
+          continue;
+        // Pula caso seja não-básica
+        if (this.gridNB.filter((el) => el[0] === i && el[1] === j).length > 0)
+          continue;
+
+        if (this.grid[i][j] < this.currentLower) {
+          this.currentLower = this.grid[i][j];
+        }
+
+        this.path.push([i, j]);
+
+        break;
+      }
+    }
+
+    console.log('this.path', this.path);
+    this.logger.log(
+      `Adicionando <span class="emp">x<span class="sub">${
+        this.path[this.path.length - 1][0] + 1
+      }${this.path[this.path.length - 1][1] + 1}</span></span> ao laço (${
+        !isLine ? '+' : '-'
+      }).`,
+      'stp',
+      0
+    );
+
+    console.log('FIRST', this.path[0][0], this.path[0][1]);
+    console.log(
+      'LAST',
+      this.path[this.path.length - 1][0],
+      this.path[this.path.length - 1][1]
+    );
+
+    if (
+      this.path.length > 1 &&
+      this.path[0][0] === this.path[this.path.length - 1][0] &&
+      this.path[0][1] === this.path[this.path.length - 1][1]
+    ) {
+      console.log('FIM DO LAÇO');
+      this.logger.log(`Laço encontrado!`, 'stp', 0);
+      return;
+    }
+
+    // this.passoLaco();
   }
 
   /**
