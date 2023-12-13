@@ -32,7 +32,7 @@ h1 {
 }
 
 table {
-  width: 50%;
+  width: 55%;
   margin: 16px;
 
   tr th {
@@ -60,10 +60,14 @@ table {
   tr.emph, td.emph, th.emph {
     background-color: rgba(255, 255, 255, 0.1);
   }
+
+  tr.emph-done, td.emph-done, th.emph-done {
+    background-color: rgba(129, 0, 255, 0.33);
+  }
 }
 
 .log {
-  width: 40%;
+  width: 35%;
   background-color: rgba(255, 255, 255, 0.1);
   height: 400px;
   padding: 16px;
@@ -100,14 +104,17 @@ a {
   letter-spacing: 0.1em;
   opacity: 0.0;
 
-  span.sub {
-    vertical-align: sub;
-    font-size: 0.75em;
+  &.corner--top-left {
+    bottom: unset;
+    right: unset;
+    top: 6px;
+    left: 6px;
+    font-size: 1.4em;
   }
 }
 
 .visible {
-  .corner {
+  &.corner, .corner {
     opacity: 0.4;
   }
 }
@@ -120,4 +127,14 @@ a {
   width: 2em;
   height: 2em;
   text-align: center;
+}
+
+mat-slider {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

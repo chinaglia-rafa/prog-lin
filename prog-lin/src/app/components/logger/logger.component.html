@@ -1,4 +1,9 @@
-<div class="log" *ngFor="let log of loggerService.logs">
+<div
+  class="log"
+  [class.err]="log.type === 'err'"
+  [class.stp]="log.type === 'stp' && log.level === 0"
+  *ngFor="let log of loggerService.logs"
+>
   <div class="type">[{{ log.type }}]</div>
-  <div class="text">{{ log.text }}</div>
+  <div class="text" [innerHTML]="log.text"></div>
 </div>

@@ -8,3 +8,63 @@ body {
   padding: 0;
   font-family: 'Quicksand';
 }
+
+span.emp {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 1.03em;
+  background-color: #5100ff;
+  color: white;
+}
+
+span.sub {
+  vertical-align: sub;
+  font-size: 0.75em;
+}
+
+.button {
+  border: none;
+  padding: 16px 32px;
+  margin: 16px;
+  font-size: 2em;
+  border-radius: 1em;
+  cursor: pointer;
+  font-family: 'Quicksand';
+  background-color: rgba(0, 0, 0, 0.0);
+  color: #001220;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.12s ease-in;
+  width: fit-content;
+
+  &[disabled] {
+    cursor: default;
+    &::before {
+      background-color: #82769d;
+    }
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #5100ff;
+    transition: all 0.12s ease-in;
+    z-index: -1;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active:not([disabled]) {
+    background-color: rgba(0, 0, 0, 0.2);
+    text-shadow: 0px 0px 1px #001220;
+  }
+}

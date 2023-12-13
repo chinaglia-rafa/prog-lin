@@ -7,6 +7,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { TransportsComponent } from './pages/transports/transports.component';
 import { AboutComponent } from './pages/about/about.component';
 import { LoggerComponent } from './components/logger/logger.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -14,13 +19,18 @@ import { LoggerComponent } from './components/logger/logger.component';
     HomeComponent,
     TransportsComponent,
     AboutComponent,
-    LoggerComponent
+    LoggerComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

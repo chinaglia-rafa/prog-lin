@@ -12,8 +12,10 @@ export class LoggerComponent implements OnInit {
   constructor(public loggerService: LoggerService) {}
 
   ngOnInit(): void {
-    this.loggerService.log(`Bom dia.`, 'dev');
-    this.loggerService.log(`Como estamos nesse dia?`, 'dev');
-    this.loggerService.log(`Seu nível atual de logs é [${this.level}]`, 'dev');
+    this.loggerService.log(`Olá, usuário!`, 'dev');
+    this.loggerService.log(
+      `Antes de dar início à execução do algoritmo, ajuste os valores de custos entre destinos, bem como as necessidades de cada cidade.`,
+      'dev'
+    );
   }
 }

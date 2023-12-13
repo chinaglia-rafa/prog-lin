@@ -2,6 +2,16 @@
   display: flex;
   flex-direction: row;
   padding: 4px 8px;
+  margin: 4px 0;
+  border-radius: 6px;
+
+  &.err {
+    background-color: #b71c1c;
+  }
+
+  &.stp {
+    background-color: #c600dc;
+  }
 
   .type {
     margin-right: 8px;

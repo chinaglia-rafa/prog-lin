@@ -2,87 +2,206 @@
   <img src="../../../assets/svg/back.svg" alt="" /> voltar</a
 >
 <div class="container center">
-  <table cellPadding="0" cellSpacing="0">
+  <table cellPadding="0" cellSpacing="0" [class.visible]="identifyCells">
     <tr class="emph">
       <th rowspan="2">Fontes</th>
       <th colspan="5">Destinos</th>
       <th rowspan="2">Disp.</th>
     </tr>
     <tr>
-      <th>Araraquara</th>
-      <th>Assis</th>
-      <th>Franca</th>
-      <th>Presidente Prudente</th>
-      <th>São Paulo</th>
+      <th [class.emph-done]="transportsService.finishedDestinies.has(0)">
+        Araraquara
+      </th>
+      <th [class.emph-done]="transportsService.finishedDestinies.has(1)">
+        Assis
+      </th>
+      <th [class.emph-done]="transportsService.finishedDestinies.has(2)">
+        Franca
+      </th>
+      <th [class.emph-done]="transportsService.finishedDestinies.has(3)">
+        Presidente Prudente
+      </th>
+      <th [class.emph-done]="transportsService.finishedDestinies.has(4)">
+        Sorocaba
+      </th>
     </tr>
-    <tr>
+    <tr [class.emph-done]="transportsService.finishedSources.has(0)">
       <td>Marília</td>
-      <td>
-        <input class="square-input" type="text" />
-        <div class="corner">x<span class="sub">11</span></div>
+      <td
+        [class.emph-done]="transportsService.finishedDestinies.has(i)"
+        *ngFor="let col of transportsService.grid[0]; let i = index"
+      >
+        <input
+          [value]="col"
+          (change)="changeGrid(0, i, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-1-' + i"
+        />
+        <div class="corner">
+          x<span class="sub">1{{ i + 1 }}</span>
+        </div>
+        <div class="visible corner corner--top-left">
+          {{
+            transportsService.gridBackup.length > 0
+              ? transportsService.gridBackup[0][i]
+              : ""
+          }}
+        </div>
       </td>
-      <td>
-        <div class="corner">x<span class="sub">12</span></div>
+      <td class="emph">
+        <input
+          [value]="transportsService.avaliable[0]"
+          (change)="changeAvaliable(0, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-disp-' + 0"
+        />
       </td>
-      <td>
-        <div class="corner">x<span class="sub">13</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">14</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">15</span></div>
-      </td>
-      <td class="emph"></td>
     </tr>
-    <tr>
+    <tr [class.emph-done]="transportsService.finishedSources.has(1)">
       <td>Rio Preto</td>
-      <td>
-        <div class="corner">x<span class="sub">21</span></div>
+      <td
+        [class.emph-done]="transportsService.finishedDestinies.has(i)"
+        *ngFor="let col of transportsService.grid[1]; let i = index"
+      >
+        <input
+          [value]="col"
+          (change)="changeGrid(1, i, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-2-' + i"
+        />
+        <div class="corner">
+          x<span class="sub">2{{ i + 1 }}</span>
+        </div>
+        <div class="visible corner corner--top-left">
+          {{
+            transportsService.gridBackup.length > 0
+              ? transportsService.gridBackup[1][i]
+              : ""
+          }}
+        </div>
       </td>
-      <td>
-        <div class="corner">x<span class="sub">22</span></div>
+      <td class="emph">
+        <input
+          [value]="transportsService.avaliable[1]"
+          (change)="changeAvaliable(1, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-disp-' + 1"
+        />
       </td>
-      <td>
-        <div class="corner">x<span class="sub">23</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">24</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">25</span></div>
-      </td>
-      <td class="emph"></td>
     </tr>
-    <tr>
+    <tr [class.emph-done]="transportsService.finishedSources.has(2)">
       <td>São Paulo</td>
-      <td>
-        <div class="corner">x<span class="sub">31</span></div>
+      <td
+        [class.emph-done]="transportsService.finishedDestinies.has(i)"
+        *ngFor="let col of transportsService.grid[2]; let i = index"
+      >
+        <input
+          [value]="col"
+          (change)="changeGrid(2, i, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-3-' + i"
+        />
+        <div class="corner">
+          x<span class="sub">3{{ i + 1 }}</span>
+        </div>
+        <div class="visible corner corner--top-left">
+          {{
+            transportsService.gridBackup.length > 0
+              ? transportsService.gridBackup[2][i]
+              : ""
+          }}
+        </div>
       </td>
-      <td>
-        <div class="corner">x<span class="sub">32</span></div>
+      <td class="emph">
+        <input
+          [value]="transportsService.avaliable[2]"
+          (change)="changeAvaliable(2, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-disp-' + 2"
+        />
       </td>
-      <td>
-        <div class="corner">x<span class="sub">33</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">34</span></div>
-      </td>
-      <td>
-        <div class="corner">x<span class="sub">35</span></div>
-      </td>
-      <td class="emph"></td>
     </tr>
     <tr class="emph">
       <td><b>Necessidade</b></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td
+        [class.emph-done]="transportsService.finishedDestinies.has(i)"
+        *ngFor="let col of transportsService.needed; let i = index"
+      >
+        <input
+          [value]="col"
+          (change)="changeNeeded(i, $event)"
+          class="square-input"
+          [disabled]="transportsService.active"
+          type="text"
+          [id]="'ipt-needed-' + i"
+        />
+      </td>
       <td></td>
     </tr>
   </table>
+  <div class="actions">
+    <button
+      style="width: 238px"
+      [disabled]="transportsService.active"
+      class="button"
+      (click)="go()"
+    >
+      {{ transportsService.active ? "Executando" : "Começar" }}
+    </button>
+    <div class="flex">
+      <div>
+        <label>Nível de logs</label>
+        <mat-slider
+          [value]="logger.level"
+          #levelSlider
+          (valueChange)="logger.level = levelSlider.value"
+          min="0"
+          max="2"
+          [thumbLabel]="true"
+        ></mat-slider>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <mat-checkbox
+          #checkboxDidatico
+          (change)="transportsService.withTimer = checkboxDidatico.checked"
+          color="accent"
+        >
+          Modo didático
+        </mat-checkbox>
+        <mat-icon
+          style="opacity: 0.6"
+          matTooltip="O modo didático faz com que o algoritmo seja resolvido pausadamente para que seja mais facilmente compreendido."
+          >help</mat-icon
+        >
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <mat-checkbox
+          #checkboxIdentify
+          (change)="identifyCells = checkboxIdentify.checked"
+          color="accent"
+        >
+          Identificar células
+        </mat-checkbox>
+        <mat-icon
+          style="opacity: 0.6"
+          matTooltip="Exibe permanentemente os identificadores de células."
+          >help</mat-icon
+        >
+      </div>
+    </div>
+  </div>
   <div class="log">
     <app-logger></app-logger>
   </div>

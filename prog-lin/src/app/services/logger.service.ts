@@ -26,7 +26,13 @@ export interface Log {
 export class LoggerService {
   logs: Log[] = [];
 
+  level = 2;
+
   constructor() {}
+
+  clear(): void {
+    this.logs = [];
+  }
 
   log(str: string, type: string, level: number = 0): void {
     if (!['dev', 'stp', 'dec', 'err'].includes(type)) {
@@ -37,9 +43,10 @@ export class LoggerService {
       console.log('Erro: nível de log desconhecido');
       return;
     }
-    console.log('oi');
 
-    this.logs.unshift({
+    if (this.level < level) return;
+
+    this.logs.push({
       text: str,
       type: type,
       level: level,
